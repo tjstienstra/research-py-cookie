@@ -1,0 +1,27 @@
+{
+  "project_name": "package",
+  "org": "org",
+  "url": "https://github.com/{{ cookiecutter.org }}/{{ cookiecutter.project_name }}",
+  "full_name": "My Name",
+  "email": "me@email.com",
+  "project_short_description": "A great package.",
+  "license": ["BSD", "Apache", "MIT"],
+  "vcs": true,
+  "pydocstyle_convention": ["numpy", "google", "pep257"],
+  "notebooks": false,
+  "__year": "{% now 'utc', '%Y' %}",
+  "__project_slug": "{{ cookiecutter.project_name | lower | replace('-', '_') | replace('.', '_') }}",
+  "__answers": "",
+  "__prompts__": {
+    "project_name": "The name of your project",
+    "org": "The name of your (GitHub?) org",
+    "url": "The url to your GitHub or GitLab repository",
+    "full_name": "Your name",
+    "email": "Your email",
+    "project_short_description": "A short description of your project",
+    "license": "Select a license",
+    "vcs": "Use version control for versioning",
+    "pydocstyle_convention": "Select a docstring convention",
+    "notebooks": "Use Jupyter notebooks"
+  }
+}

@@ -1,0 +1,131 @@
+[build-system]
+{%- if cookiecutter.vcs %}
+requires = ["hatchling", "hatch-vcs"]
+{%- else %}
+requires = ["hatchling"]
+{%- endif %}
+build-backend = "hatchling.build"
+
+
+[project]
+name = "{{ cookiecutter.project_name }}"
+authors = [
+  { name = "{{ cookiecutter.full_name }}", email = "{{ cookiecutter.email }}" },
+]
+description = "{{ cookiecutter.project_short_description }}"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+  "Development Status :: 1 - Planning",
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Developers",
+{%- if cookiecutter.license == "BSD" %}
+  "License :: OSI Approved :: BSD License",
+{%- elif cookiecutter.license == "Apache" %}
+  "License :: OSI Approved :: Apache Software License",
+{%- elif cookiecutter.license == "MIT" %}
+  "License :: OSI Approved :: MIT License",
+{%- endif %}
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering",
+  "Typing :: Typed",
+]
+dynamic = ["version"]
+dependencies = []
+
+[project.optional-dependencies]
+test = [
+  "pytest >=6",
+  "pytest-cov >=3",
+]
+lint = [
+  "ruff >= 0.9",
+]
+docs = []
+
+[project.urls]
+Homepage = "{{ cookiecutter.url }}"
+"Bug Tracker" = "{{ cookiecutter.url }}/issues"
+Discussions = "{{ cookiecutter.url }}/discussions"
+Changelog = "{{ cookiecutter.url }}/releases"
+
+
+[tool.hatch]
+{%- if not cookiecutter.vcs %}
+version.path = "src/{{ cookiecutter.__project_slug  }}/__init__.py"
+{%- else %}
+version.source = "vcs"
+build.hooks.vcs.version-file = "src/{{ cookiecutter.__project_slug }}/_version.py"
+{%- endif %}
+
+[tool.hatch.envs.default]
+features = ["test"]
+scripts.test = "pytest {args}"
+
+
+[tool.uv]
+dev-dependencies = [
+  "{{ cookiecutter.__project_slug }}[test]",
+]
+
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
+xfail_strict = true
+filterwarnings = [
+  "error",
+]
+log_cli_level = "INFO"
+testpaths = [
+  "tests",
+]
+
+
+[tool.coverage]
+run.source = ["{{ cookiecutter.__project_slug }}"]
+report.exclude_also = [
+  '\.\.\.$',
+  'if typing.TYPE_CHECKING:',
+]
+
+
+[tool.ruff]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  "COM812",   # Trailing comma missing
+  "D203",     # Conflicts D211 which enforces no blank line before class docstring
+  "DTZ005",   # Specify the timezone in datetime
+  "FBT",      # Booleans should be keyword arguments
+  "FIX",      # Line contains TODO/FIXME, consider resolving the issue
+  "ISC001",   # Implicitly concatenated string literals on one line (incompatible with format)
+  "PLR09",    # Too many <...>
+  "PLR2004",  # Magic value used in comparison
+  "TD003",    # Missing issue link on the line following this TODO
+]
+isort.required-imports = ["from __future__ import annotations"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*.py" = [
+  "D",        # Documentation
+  "S101",     # Tests use assert statements
+]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"  # Disallow all relative imports.
+
+[tool.ruff.lint.pydocstyle]
+convention = "{{ cookiecutter.pydocstyle_convention }}"
+
+[tool.ruff.format]
+docstring-code-format = true  # Enable reformatting of code snippets in docstrings.

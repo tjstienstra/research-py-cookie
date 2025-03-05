@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
+permissions:
+  contents: write
+
+concurrency:
+    group: {% raw %}${{ github.workflow }}-${{ github.ref }}{% endraw %}
+  cancel-in-progress: true
+
+jobs:
+  latex-build:
+    name: Build paper
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        name: Tectonic Cache
+        with:
+          path: ~/.cache/Tectonic
+          key: {% raw %}${{ runner.os }}-tectonic-${{ hashFiles('**/*.tex') }}{% endraw %}
+          restore-keys: |
+            {% raw %}${{ runner.os }}-tectonic-{% endraw %}
+      - uses: wtfjoke/setup-tectonic@v3
+      - name: Run Tectonic
+        run: tectonic paper/main.tex
+      - name: Commit and push PDF to latex-build branch
+        run: |
+          git config user.name 'github-actions'
+          git config user.email 'github-actions@github.com'
+          # Create a new orphan branch
+          git checkout --orphan latex-build
+          git rm -rf .
+          cp paper/main.pdf ./paper.pdf
+          git add ./paper.pdf
+          git commit -m "Add PDF build from CI"
+          git push origin latex-build --force
