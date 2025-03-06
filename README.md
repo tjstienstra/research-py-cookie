@@ -71,7 +71,8 @@ consistency.
   "editor.wordWrap": "on",
   "files.trimTrailingWhitespace": true,
   "rewrap.autoWrap.enabled": true,
-    "git.autofetch": true,
+  "git.autofetch": true,
+  "latex-workshop.latex.outDir": "build",
   "[markdown]": {
     "editor.defaultFormatter": "GitHub.copilot",
     "editor.rulers": [80],
