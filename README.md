@@ -43,6 +43,10 @@ Don't forget to install the precommit hooks:
 ```bash
 pre-commit install
 ```
+To run the precommit hooks on all files use:
+```bash
+pre-commit run --all-files
+```
 To run ruff you can, while also fixing simple problems, use:
 ```bash
 ruff check --fix
