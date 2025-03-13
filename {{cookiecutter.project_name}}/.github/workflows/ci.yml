@@ -8,7 +8,7 @@ on:
       - main
 
 concurrency:
-  group: {% raw %}${{ github.workflow }}-${{ github.ref }}{% endraw %}
+  group: {% raw %}${{ github.workflow }}-${{ github.ref }}-ci{% endraw %}
   cancel-in-progress: true
 
 env:

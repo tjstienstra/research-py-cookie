@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 concurrency:
-    group: {% raw %}${{ github.workflow }}-${{ github.ref }}{% endraw %}
+    group: {% raw %}${{ github.workflow }}-${{ github.ref }}-build{% endraw %}
   cancel-in-progress: true
 
 jobs:
